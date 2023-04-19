@@ -10,9 +10,29 @@ exports.getDaysApart = (date, date2) => {
 
 // The following date tools return iso format string date only
 exports.getFirstOfYearDate = () => {
-  const d = new Date();
+  let d = new Date();
   let year = d.getFullYear();
   return year + '-01-01';
+};
+
+exports.firstDayOfCurrentMonth = (string, search, replace) => {
+  let d = new Date();
+  let year = d.getFullYear();
+  let month = d.getMonth() + 1;
+  month = String(month).padStart(2, '0')
+  return year + '-' + month + '-01';
+};
+
+exports.lastDayOfCurrentMonth = (string, search, replace) => {
+	var today = new Date();
+	return new Date(today.getFullYear(), today.getMonth()+1, 0)
+		.toISOString()
+		.substring(0, 10)
+};
+
+//string tools
+exports.replaceAll = (string, search, replace) => {
+	return string.split(search).join(replace);
 };
 
 //JSON Tools
@@ -24,7 +44,7 @@ exports.jsonKeyToString = (json, key, joinWith = ', ') => {
 	  if(object[key] != undefined)
 	    string += object[key] + joinWith;
 	 
-	 string = string.substring(0, string.length - joinWith.length);
+	string = string.substring(0, string.length - joinWith.length);
 	  
 	return string;
 }
@@ -76,6 +96,26 @@ exports.arrayToString = (array, joinWith = ', ') => {
 	return array.join(joinWith);
 }
 
+exports.arrayToQuoteStringForDB = (array) => {
+	return `'` + array.join(`','`) + `'`;
+}
+
+exports.objectArrayKeyToStringForDB = (array, keyArray) => {
+	let strings = []
+
+	for(let key of keyArray)
+		strings[key] = ''
+
+	for(let item of array)
+		for(let key of keyArray)
+			strings[key] += `'` + item[key] + `','`
+
+	for(let item in strings)
+		strings[item] = strings[item].substring(0, strings[item].length - 2) 
+
+	return strings;
+}
+
 //Format tools
 exports.formatNumber = (number, decimal = 0) => {
   //if negative, change to positive and put it in a string with proper format
@@ -92,7 +132,6 @@ exports.formatNumber = (number, decimal = 0) => {
     return `${number.toLocaleString("en-US", options)}`;
 };
 
-//Format tools
 exports.formatCurrency = (number, decimal = 2) => {
   //if negative, change to positive and put it in a string with proper format
 	var options = { 
