@@ -1,3 +1,4 @@
+var fs = require('fs/promises');
 
 //date tools
 exports.getDaysApart = (date, date2) => {
@@ -58,6 +59,8 @@ exports.jsonUpdateObject = (json, key, value, updateKey, updateValue)  => {
 	return json;
 }
 
+//input json
+//'keyOne, keyTwo'
 exports.jsonToCustomCsv = (json, keys)  => {
 	
 	let csv = '';
@@ -77,7 +80,6 @@ exports.jsonToCustomCsv = (json, keys)  => {
 	  csv = csv.substring(0, csv.length - 1);
 	  csv += '\r\n';
 	}
-	 
 	return csv;
 }
 
@@ -162,4 +164,61 @@ exports.convertAndFormatPercent = (num, decimal = 1) => {
   	num = num * 100;
     return `${num.toFixed(decimal)}%`;
   }
+};
+
+//fs
+//input sample:
+//await Utils.readFile('D:\\myDir\\', 'test.csv')
+exports.readFile = async (directory, exportName) => {
+	try {
+  	return await fs.readFile(directory + exportName, { encoding: 'utf8' });
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
+
+//input sample:
+// Utils.deleteFile('D:\\myDir\\', 'test.csv')
+exports.deleteFile = async (directory, exportName) => {
+	try {
+  	return await fs.unlink(directory + exportName);
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
+
+//input sample:
+//Utils.saveFile(fileData, 'D:\\myDir\\', 'test.csv')
+exports.saveFile = async (fileData, directory, exportName) => {
+	try {
+  	await fs.writeFile(directory + exportName, fileData);
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
+
+//create or add to file
+//input sample:
+// Utils.appendToFile(fileData, 'D:\\myDir\\', 'test.csv')
+exports.appendToFile = async (fileData, directory, exportName) => {
+	try {
+  	return await fs.appendFile(directory + exportName, fileData);
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
+
+//input sample:
+// Utils.appendToFile(fileData, 'D:\\myDir\\', 'test.csv')
+exports.renameFile = async (directory, exportName, newName) => {
+	try {
+  	return await fs.rename(directory + exportName, directory + newName);
+	}
+	catch (error) {
+		console.error(error)
+	}
 };
