@@ -1,4 +1,7 @@
 var fs = require('fs/promises');
+var fsMain = require('fs');
+var html_to_pdf = require('html-pdf-node');
+
 
 //date tools
 exports.getDaysApart = (date, date2) => {
@@ -91,6 +94,20 @@ exports.jsonToCsv = (json)  => {
 	  csv += `"` + Object.values(object).join('","') + `"\r\n`;
 	
 	return csv;
+}
+
+//PDF Tools
+//This uses Pupeteer and html_to_pdf
+exports.htmlToPDF = async (filename, directory, html)  => {
+  try {
+    let options = { format: 'A4' };
+    let htmlFile = { content: html };
+    let pdfBuffer = await html_to_pdf.generatePdf(htmlFile, options)  
+  	return await fs.appendFile(directory + filename, pdfBuffer);
+  }
+  catch(error) {
+    console.error(error)
+  }
 }
 
 //array tools
