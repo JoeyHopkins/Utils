@@ -239,3 +239,15 @@ exports.renameFile = async (directory, exportName, newName) => {
 		console.error(error)
 	}
 };
+
+
+//input sample:
+// Utils.readDirContents('D:\\myDir\\')
+exports.readDirContents = async (directory) => {
+	try {
+  	return await fs.readdir(directory);
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
