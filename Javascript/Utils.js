@@ -251,3 +251,23 @@ exports.readDirContents = async (directory) => {
 		console.error(error)
 	}
 };
+
+//input sample:
+// Utils.cleanDirLocationFilesOnly('D:\\myDir\\')
+exports.cleanDirLocationFilesOnly = async (directory) => {
+	try {
+  	let dir = await fs.readdir(directory);
+  	for(item of dir)
+  		try {
+  			await fs.unlink(directory + item);
+  			console.log('removed file: ' + directory + item)
+  		}
+  		catch (err){
+  			console.log('Skipping folder: ' + directory + item)
+  		}
+  	return
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
