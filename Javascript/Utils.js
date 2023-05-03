@@ -271,3 +271,24 @@ exports.cleanDirLocationFilesOnly = async (directory) => {
 		console.error(error)
 	}
 };
+
+//input sample:
+// Utils.cleanDirLocation('D:\\myDir\\')
+exports.cleanDirLocation = async (directory) => {
+	try {
+  	let dir = await fs.readdir(directory);
+  	for(item of dir)
+  		try {
+  			await fs.unlink(directory + item);
+  			console.log('removed file: ' + directory + item)
+  		}
+  		catch (err){
+  			await fsMain.rmdirSync(directory + item, { recursive: true }); 
+  			console.log('removed folder: ' + directory + item)
+  		}
+  	return
+	}
+	catch (error) {
+		console.error(error)
+	}
+};
